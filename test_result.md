@@ -131,15 +131,18 @@ backend:
 
   - task: "API Endpoints - Cart Management"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented session-based cart with add/update/remove/clear operations"
+      - working: true
+        agent: "testing"
+        comment: "✅ All cart operations tested successfully: POST /cart (add item), GET /cart/{session_id}, PUT /cart/{session_id}/{item_index} (update), DELETE /cart/{session_id}/{item_index} (remove item), DELETE /cart/{session_id} (clear cart). Session-based persistence working correctly."
 
   - task: "API Endpoints - Custom Orders"
     implemented: true
