@@ -20,6 +20,9 @@ from database import *
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
+# Stripe configuration
+stripe.api_key = "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"
+
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
