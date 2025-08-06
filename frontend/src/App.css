@@ -1,34 +1,337 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Thorned Magnolia Collective - Brand Styling */
+
+/* CSS Variables for Brand Colors */
+:root {
+  --warm-sage: #C4B5A0;
+  --soft-taupe: #D4C4B0;
+  --rich-chocolate: #6B4E37;
+  --charcoal: #2C2C2C;
+  --cream-white: #FAF9F7;
+  --soft-gray: #F5F3F0;
+  --warm-gray: #8B7D6B;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Import Elegant Typography */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  line-height: 1.6;
+  color: var(--charcoal);
+  background-color: var(--cream-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.App-link {
-    color: #61dafb;
+/* Typography Hierarchy */
+.hero-title,
+.section-title,
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--charcoal);
+  letter-spacing: -0.02em;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: var(--warm-gray);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 2rem;
+}
+
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Custom Color Classes */
+.text-warm-sage { color: var(--warm-sage); }
+.text-soft-taupe { color: var(--soft-taupe); }
+.text-rich-chocolate { color: var(--rich-chocolate); }
+.text-charcoal { color: var(--charcoal); }
+.text-cream-white { color: var(--cream-white); }
+.text-soft-gray { color: var(--soft-gray); }
+.text-warm-gray { color: var(--warm-gray); }
+
+.bg-warm-sage { background-color: var(--warm-sage); }
+.bg-soft-taupe { background-color: var(--soft-taupe); }
+.bg-rich-chocolate { background-color: var(--rich-chocolate); }
+.bg-charcoal { background-color: var(--charcoal); }
+.bg-cream-white { background-color: var(--cream-white); }
+.bg-soft-gray { background-color: var(--soft-gray); }
+.bg-warm-gray { background-color: var(--warm-gray); }
+
+/* Custom Button Styles */
+.btn-primary {
+  background-color: var(--warm-sage);
+  color: var(--cream-white);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(196, 181, 160, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #B5A390;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(196, 181, 160, 0.4);
+  color: var(--cream-white);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--charcoal);
+  border: 2px solid var(--charcoal);
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--charcoal);
+  color: var(--cream-white);
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  background-color: var(--cream-white);
+  color: var(--charcoal);
+  border: 1px solid var(--soft-gray);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+  background-color: var(--warm-sage);
+  color: var(--cream-white);
+  border-color: var(--warm-sage);
+}
+
+/* Card Styles */
+.category-card,
+.product-card {
+  background: var(--cream-white);
+  border-radius: 12px;
+  border: 1px solid var(--soft-gray);
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.category-card:hover,
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(44, 44, 44, 0.1);
+  border-color: var(--warm-sage);
+}
+
+.product-card img {
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Navigation Styles */
+.navbar {
+  backdrop-filter: blur(12px);
+  background-color: rgba(250, 249, 247, 0.95);
+}
+
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--warm-sage);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, var(--cream-white) 0%, var(--soft-gray) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23C4B5A0" fill-opacity="0.05" fill-rule="nonzero"><circle cx="30" cy="30" r="1"/></g></svg>');
+  pointer-events: none;
+}
+
+/* Section Backgrounds */
+.categories-section {
+  background: var(--cream-white);
+}
+
+.featured-section {
+  background: var(--soft-gray);
+}
+
+.custom-cta-section {
+  background: linear-gradient(135deg, var(--warm-sage) 0%, #B5A390 100%);
+}
+
+.features-section {
+  background: var(--cream-white);
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection Styling */
+::selection {
+  background-color: var(--warm-sage);
+  color: var(--cream-white);
+}
+
+::-moz-selection {
+  background-color: var(--warm-sage);
+  color: var(--cream-white);
+}
+
+/* Focus Styles */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--warm-sage);
+  outline-offset: 2px;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Music Player Styles */
+.music-player {
+  backdrop-filter: blur(12px);
+}
+
+.music-player .group:hover .group-hover\\:block {
+  display: block;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--soft-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--warm-sage);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rich-chocolate);
+}
+
+/* App Container */
+.App {
+  min-height: 100vh;
+  background-color: var(--cream-white);
 }

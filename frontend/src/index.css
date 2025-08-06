@@ -4,77 +4,72 @@
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-        "Helvetica Neue", sans-serif;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #FAF9F7;
+    color: #2C2C2C;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-
-
 
 @layer base {
   :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
+        --background: 250 249 247; /* #FAF9F7 - Cream White */
+        --foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --card: 250 249 247; /* #FAF9F7 - Cream White */
+        --card-foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --popover: 250 249 247; /* #FAF9F7 - Cream White */
+        --popover-foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --primary: 196 181 160; /* #C4B5A0 - Warm Sage */
+        --primary-foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --secondary: 245 243 240; /* #F5F3F0 - Soft Gray */
+        --secondary-foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --muted: 245 243 240; /* #F5F3F0 - Soft Gray */
+        --muted-foreground: 139 125 107; /* #8B7D6B - Warm Gray */
+        --accent: 212 196 176; /* #D4C4B0 - Soft Taupe */
+        --accent-foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --destructive: 220 38 38; /* Red for errors */
+        --destructive-foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --border: 245 243 240; /* #F5F3F0 - Soft Gray */
+        --input: 245 243 240; /* #F5F3F0 - Soft Gray */
+        --ring: 196 181 160; /* #C4B5A0 - Warm Sage */
+        --chart-1: 196 181 160; /* #C4B5A0 - Warm Sage */
+        --chart-2: 212 196 176; /* #D4C4B0 - Soft Taupe */
+        --chart-3: 107 78 55; /* #6B4E37 - Rich Chocolate */
+        --chart-4: 139 125 107; /* #8B7D6B - Warm Gray */
+        --chart-5: 44 44 44; /* #2C2C2C - Charcoal */
+        --radius: 8px;
     }
   .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+        --background: 44 44 44; /* #2C2C2C - Charcoal */
+        --foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --card: 44 44 44; /* #2C2C2C - Charcoal */
+        --card-foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --popover: 44 44 44; /* #2C2C2C - Charcoal */
+        --popover-foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --primary: 196 181 160; /* #C4B5A0 - Warm Sage */
+        --primary-foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --secondary: 139 125 107; /* #8B7D6B - Warm Gray */
+        --secondary-foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --muted: 139 125 107; /* #8B7D6B - Warm Gray */
+        --muted-foreground: 245 243 240; /* #F5F3F0 - Soft Gray */
+        --accent: 212 196 176; /* #D4C4B0 - Soft Taupe */
+        --accent-foreground: 44 44 44; /* #2C2C2C - Charcoal */
+        --destructive: 220 38 38; /* Red for errors */
+        --destructive-foreground: 250 249 247; /* #FAF9F7 - Cream White */
+        --border: 139 125 107; /* #8B7D6B - Warm Gray */
+        --input: 139 125 107; /* #8B7D6B - Warm Gray */
+        --ring: 196 181 160; /* #C4B5A0 - Warm Sage */
+        --chart-1: 196 181 160; /* #C4B5A0 - Warm Sage */
+        --chart-2: 212 196 176; /* #D4C4B0 - Soft Taupe */
+        --chart-3: 107 78 55; /* #6B4E37 - Rich Chocolate */
+        --chart-4: 139 125 107; /* #8B7D6B - Warm Gray */
+        --chart-5: 250 249 247; /* #FAF9F7 - Cream White */
     }
 }
-
-
 
 @layer base {
   * {
@@ -83,4 +78,73 @@ code {
   body {
     @apply bg-background text-foreground;
     }
+}
+
+/* Additional custom utilities for brand colors */
+@layer utilities {
+  .text-warm-sage {
+    color: #C4B5A0;
+  }
+  .text-soft-taupe {
+    color: #D4C4B0;
+  }
+  .text-rich-chocolate {
+    color: #6B4E37;
+  }
+  .text-charcoal {
+    color: #2C2C2C;
+  }
+  .text-cream-white {
+    color: #FAF9F7;
+  }
+  .text-soft-gray {
+    color: #F5F3F0;
+  }
+  .text-warm-gray {
+    color: #8B7D6B;
+  }
+  
+  .bg-warm-sage {
+    background-color: #C4B5A0;
+  }
+  .bg-soft-taupe {
+    background-color: #D4C4B0;
+  }
+  .bg-rich-chocolate {
+    background-color: #6B4E37;
+  }
+  .bg-charcoal {
+    background-color: #2C2C2C;
+  }
+  .bg-cream-white {
+    background-color: #FAF9F7;
+  }
+  .bg-soft-gray {
+    background-color: #F5F3F0;
+  }
+  .bg-warm-gray {
+    background-color: #8B7D6B;
+  }
+
+  .border-warm-sage {
+    border-color: #C4B5A0;
+  }
+  .border-soft-taupe {
+    border-color: #D4C4B0;
+  }
+  .border-rich-chocolate {
+    border-color: #6B4E37;
+  }
+  .border-charcoal {
+    border-color: #2C2C2C;
+  }
+  .border-cream-white {
+    border-color: #FAF9F7;
+  }
+  .border-soft-gray {
+    border-color: #F5F3F0;
+  }
+  .border-warm-gray {
+    border-color: #8B7D6B;
+  }
 }
