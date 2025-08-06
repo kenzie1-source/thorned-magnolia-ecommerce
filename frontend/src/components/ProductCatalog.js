@@ -23,12 +23,12 @@ const ProductCatalog = () => {
     let filtered = [...categoryProducts];
 
     // Filter by size
-    if (selectedSize) {
+    if (selectedSize && selectedSize !== 'all') {
       filtered = filtered.filter(product => product.sizes.includes(selectedSize));
     }
 
     // Filter by color
-    if (selectedColor) {
+    if (selectedColor && selectedColor !== 'all') {
       filtered = filtered.filter(product => product.colors.includes(selectedColor));
     }
 
