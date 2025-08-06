@@ -7,6 +7,7 @@ import ProductCatalog from "./components/ProductCatalog";
 import CustomOrders from "./components/CustomOrders";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import MusicPlayer from "./components/MusicPlayer";
 
 function App() {
   return (
