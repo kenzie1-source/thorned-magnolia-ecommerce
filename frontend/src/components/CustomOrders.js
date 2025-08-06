@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -8,7 +8,7 @@ import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
 import { Upload, ArrowLeft, Image as ImageIcon, Type, Palette, Shirt } from 'lucide-react';
-import { fonts, tshirtStyles, colors, sizes, submitCustomOrder } from '../mock';
+import { customOrdersAPI, uploadAPI, utilityAPI, calculatePrice } from '../services/api';
 import { useToast } from '../hooks/use-toast';
 
 const CustomOrders = () => {
@@ -22,43 +22,106 @@ const CustomOrders = () => {
     shirtStyle: '',
     shirtColor: '',
     size: '',
-    frontBack: 'front',
+    printLocation: 'front',
     quantity: 1,
     specialInstructions: ''
   });
   
   const [imagePreview, setImagePreview] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fonts, setFonts] = useState([]);
+  const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [shirtStyles, setShirtStyles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const loadUtilityData = async () => {
+      try {
+        const [fontsData, sizesData, colorsData, stylesData] = await Promise.all([
+          utilityAPI.getFonts(),
+          utilityAPI.getSizes(),
+          utilityAPI.getColors(),
+          utilityAPI.getShirtStyles()
+        ]);
+        
+        setFonts(fontsData);
+        setSizes(sizesData);
+        setColors(colorsData);
+        setShirtStyles(stylesData);
+      } catch (error) {
+        console.error('Error loading utility data:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load form data. Please refresh the page.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUtilityData();
+  }, [toast]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setFormData(prev => ({ ...prev, designImage: file }));
-      
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
+      // Validate file
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload a JPEG, PNG, or GIF image.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) { // 10MB
+        toast({
+          title: "File too large",
+          description: "Please upload an image smaller than 10MB.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      try {
+        // Upload file
+        const uploadResponse = await uploadAPI.uploadFile(file);
+        setFormData(prev => ({ ...prev, designImage: uploadResponse.filepath }));
+        
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        toast({
+          title: "Image uploaded",
+          description: "Your design image has been uploaded successfully.",
+        });
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        toast({
+          title: "Upload failed",
+          description: "Failed to upload image. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 
-  const calculatePrice = () => {
-    const selectedStyle = tshirtStyles.find(style => style.id === formData.shirtStyle);
-    const selectedSize = sizes.find(size => size.id === formData.size);
-    
-    if (!selectedStyle || !selectedSize) return 0;
-    
-    let basePrice = selectedStyle.basePrice;
-    if (formData.frontBack === 'both') basePrice += 5;
-    
-    const sizePrice = basePrice + selectedSize.extraCost;
-    return sizePrice * formData.quantity;
+  const calculateTotalPrice = () => {
+    if (!formData.shirtStyle || !formData.size) return 0;
+    return calculatePrice(formData.shirtStyle, formData.size, formData.printLocation, formData.quantity);
   };
 
   const handleSubmit = async (e) => {
@@ -67,37 +130,45 @@ const CustomOrders = () => {
 
     try {
       const orderData = {
-        ...formData,
-        totalPrice: calculatePrice(),
-        orderDate: new Date().toISOString()
+        customerName: formData.customerName,
+        email: formData.email,
+        phone: formData.phone,
+        designImage: formData.designImage,
+        designText: formData.designText,
+        selectedFont: formData.selectedFont,
+        shirtStyle: formData.shirtStyle,
+        shirtColor: formData.shirtColor,
+        size: formData.size,
+        printLocation: formData.printLocation,
+        quantity: formData.quantity,
+        specialInstructions: formData.specialInstructions
       };
 
-      const result = await submitCustomOrder(orderData);
+      const result = await customOrdersAPI.create(orderData);
       
-      if (result.success) {
-        toast({
-          title: "Order submitted successfully!",
-          description: `Your custom order #${result.orderId} has been received. We'll contact you within 24 hours.`,
-        });
-        
-        // Reset form
-        setFormData({
-          customerName: '',
-          email: '',
-          phone: '',
-          designImage: null,
-          designText: '',
-          selectedFont: '',
-          shirtStyle: '',
-          shirtColor: '',
-          size: '',
-          frontBack: 'front',
-          quantity: 1,
-          specialInstructions: ''
-        });
-        setImagePreview('');
-      }
+      toast({
+        title: "Order submitted successfully!",
+        description: `Your custom order #${result.orderId} has been received. We'll contact you within 24 hours.`,
+      });
+      
+      // Reset form
+      setFormData({
+        customerName: '',
+        email: '',
+        phone: '',
+        designImage: null,
+        designText: '',
+        selectedFont: '',
+        shirtStyle: '',
+        shirtColor: '',
+        size: '',
+        printLocation: 'front',
+        quantity: 1,
+        specialInstructions: ''
+      });
+      setImagePreview('');
     } catch (error) {
+      console.error('Error submitting order:', error);
       toast({
         title: "Error submitting order",
         description: "Please try again or contact us directly.",
@@ -107,6 +178,17 @@ const CustomOrders = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-cream-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-sage mx-auto mb-4"></div>
+          <p className="text-warm-gray">Loading custom order form...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="custom-orders-page bg-cream-white min-h-screen py-8 px-4">
@@ -253,7 +335,7 @@ const CustomOrders = () => {
                           <SelectValue placeholder="Choose style" />
                         </SelectTrigger>
                         <SelectContent>
-                          {tshirtStyles.map(style => (
+                          {shirtStyles.map(style => (
                             <SelectItem key={style.id} value={style.id}>
                               {style.name} (${style.basePrice})
                             </SelectItem>
@@ -309,7 +391,7 @@ const CustomOrders = () => {
 
                     <div>
                       <Label>Print Location *</Label>
-                      <Select value={formData.frontBack} onValueChange={(value) => handleInputChange('frontBack', value)}>
+                      <Select value={formData.printLocation} onValueChange={(value) => handleInputChange('printLocation', value)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Location" />
                         </SelectTrigger>
@@ -327,7 +409,7 @@ const CustomOrders = () => {
                         type="number"
                         min="1"
                         value={formData.quantity}
-                        onChange={(e) => handleInputChange('quantity', parseInt(e.target.value))}
+                        onChange={(e) => handleInputChange('quantity', parseInt(e.target.value) || 1)}
                         required
                       />
                     </div>
@@ -360,8 +442,8 @@ const CustomOrders = () => {
                   <div className="space-y-2">
                     {formData.shirtStyle && (
                       <div className="flex justify-between text-sm">
-                        <span>{tshirtStyles.find(s => s.id === formData.shirtStyle)?.name}</span>
-                        <span>${tshirtStyles.find(s => s.id === formData.shirtStyle)?.basePrice}</span>
+                        <span>{shirtStyles.find(s => s.id === formData.shirtStyle)?.name}</span>
+                        <span>${shirtStyles.find(s => s.id === formData.shirtStyle)?.basePrice}</span>
                       </div>
                     )}
                     
@@ -372,7 +454,7 @@ const CustomOrders = () => {
                       </div>
                     )}
                     
-                    {formData.frontBack === 'both' && (
+                    {formData.printLocation === 'both' && (
                       <div className="flex justify-between text-sm">
                         <span>Front & Back print</span>
                         <span>+$5</span>
@@ -391,13 +473,13 @@ const CustomOrders = () => {
                   
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span className="text-rich-chocolate">${calculatePrice()}</span>
+                    <span className="text-rich-chocolate">${calculateTotalPrice()}</span>
                   </div>
 
                   {formData.shirtColor && (
                     <div className="mt-4">
                       <Badge variant="outline" className="w-full justify-center">
-                        {formData.shirtColor} {formData.shirtStyle && tshirtStyles.find(s => s.id === formData.shirtStyle)?.name}
+                        {formData.shirtColor} {formData.shirtStyle && shirtStyles.find(s => s.id === formData.shirtStyle)?.name}
                       </Badge>
                     </div>
                   )}

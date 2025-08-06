@@ -1,12 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { ShoppingBag, Heart, Star, ArrowRight } from 'lucide-react';
-import { categories, products } from '../mock';
+import { productsAPI, categoriesAPI } from '../services/api';
+import { useCart } from '../contexts/CartContext';
 
 const HomePage = () => {
-  const featuredProducts = products.slice(0, 4);
+  const [categories, setCategories] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const [categoriesData, productsData] = await Promise.all([
+          categoriesAPI.getAll(),
+          productsAPI.getAll()
+        ]);
+        
+        setCategories(categoriesData);
+        setFeaturedProducts(productsData.slice(0, 4));
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const handleAddToCart = async (product) => {
+    const defaultOptions = {
+      selectedColor: product.colors[0],
+      selectedSize: 'M',
+      printLocation: 'front',
+      quantity: 1
+    };
+    
+    await addToCart(product, defaultOptions);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-cream-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-sage mx-auto mb-4"></div>
+          <p className="text-warm-gray">Loading your shopping experience...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="homepage">
@@ -28,7 +75,9 @@ const HomePage = () => {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="btn-primary px-8 py-3 text-lg">
+            <Button className="btn-primary px-8 py-3 text-lg" onClick={() => {
+              document.querySelector('.categories-section').scrollIntoView({ behavior: 'smooth' });
+            }}>
               Shop Now
               <ShoppingBag className="ml-2 h-5 w-5" />
             </Button>
@@ -94,16 +143,24 @@ const HomePage = () => {
                   <h3 className="text-lg font-medium text-charcoal mb-2">
                     {product.name}
                   </h3>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-semibold text-rich-chocolate">
-                      ${product.price}
-                    </span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col">
+                      <span className="text-xl font-semibold text-rich-chocolate">
+                        ${product.price}
+                      </span>
+                      <span className="text-sm text-warm-gray">
+                        {product.type === 'sweatshirt' ? 'Sweatshirt' : 'T-Shirt'} • Front only
+                      </span>
+                    </div>
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-yellow-400 fill-current" />
                       <span className="text-sm text-warm-gray ml-1">4.8</span>
                     </div>
                   </div>
-                  <Button className="w-full mt-4 btn-primary">
+                  <Button 
+                    className="w-full btn-primary"
+                    onClick={() => handleAddToCart(product)}
+                  >
                     Add to Cart
                   </Button>
                 </CardContent>

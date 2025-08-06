@@ -5,22 +5,45 @@ import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
 import { Heart, Star, Filter, ArrowLeft } from 'lucide-react';
-import { categories, products, addToCart } from '../mock';
-import { useToast } from '../hooks/use-toast';
+import { productsAPI, categoriesAPI } from '../services/api';
+import { useCart } from '../contexts/CartContext';
 
 const ProductCatalog = () => {
   const { categoryId } = useParams();
+  const [category, setCategory] = useState(null);
+  const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortBy, setSortBy] = useState('name');
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-  const { toast } = useToast();
-
-  const category = categories.find(cat => cat.id === categoryId);
-  const categoryProducts = products.filter(product => product.category === categoryId);
+  const [selectedSize, setSelectedSize] = useState('all');
+  const [selectedColor, setSelectedColor] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
 
   useEffect(() => {
-    let filtered = [...categoryProducts];
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const [categoriesData, productsData] = await Promise.all([
+          categoriesAPI.getAll(),
+          productsAPI.getByCategory(categoryId)
+        ]);
+        
+        const categoryData = categoriesData.find(cat => cat.id === categoryId);
+        setCategory(categoryData);
+        setProducts(productsData);
+        setFilteredProducts(productsData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [categoryId]);
+
+  useEffect(() => {
+    let filtered = [...products];
 
     // Filter by size
     if (selectedSize && selectedSize !== 'all') {
@@ -46,22 +69,36 @@ const ProductCatalog = () => {
     });
 
     setFilteredProducts(filtered);
-  }, [categoryProducts, sortBy, selectedSize, selectedColor]);
+  }, [products, sortBy, selectedSize, selectedColor]);
 
-  const handleAddToCart = (product) => {
-    addToCart(product, { size: 'M', color: product.colors[0] });
-    toast({
-      title: "Added to cart!",
-      description: `${product.name} has been added to your cart.`,
-    });
+  const handleAddToCart = async (product) => {
+    const defaultOptions = {
+      selectedColor: product.colors[0],
+      selectedSize: 'M',
+      printLocation: 'front',
+      quantity: 1
+    };
+    
+    await addToCart(product, defaultOptions);
   };
 
-  const allColors = [...new Set(categoryProducts.flatMap(product => product.colors))];
+  const allColors = [...new Set(products.flatMap(product => product.colors))];
   const allSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-cream-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-sage mx-auto mb-4"></div>
+          <p className="text-warm-gray">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!category) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-cream-white">
         <div className="text-center">
           <h1 className="text-2xl font-light text-charcoal mb-4">Category not found</h1>
           <Link to="/">
@@ -156,7 +193,7 @@ const ProductCatalog = () => {
                   <Heart className="h-4 w-4 text-charcoal" />
                 </Button>
                 <Badge className="absolute bottom-4 left-4 bg-warm-sage text-cream-white">
-                  {category.name}
+                  {product.type === 'sweatshirt' ? 'Sweatshirt' : 'T-Shirt'}
                 </Badge>
               </div>
               
@@ -194,7 +231,7 @@ const ProductCatalog = () => {
                       ${product.price}
                     </span>
                     <span className="text-sm text-warm-gray">
-                      Front only • +$5 for back
+                      Front only • +${product.type === 'sweatshirt' ? '5' : '5'} for back
                     </span>
                   </div>
                   <div className="flex items-center">
