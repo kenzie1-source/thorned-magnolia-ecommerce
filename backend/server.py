@@ -348,6 +348,44 @@ async def get_shirt_styles():
     ]
     return styles
 
+# Stripe Payment Intent endpoint
+@api_router.post("/create-payment-intent")
+async def create_payment_intent(request_data: dict):
+    """Create Stripe payment intent"""
+    try:
+        amount = request_data.get('amount')  # Amount in cents
+        currency = request_data.get('currency', 'usd')
+        order_data = request_data.get('orderData', {})
+        customer_info = request_data.get('customerInfo', {})
+        
+        # Create payment intent
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency=currency,
+            metadata={
+                'order_type': order_data.get('type', 'regular_order'),
+                'customer_name': customer_info.get('name', ''),
+                'customer_email': customer_info.get('email', ''),
+                'customer_phone': customer_info.get('phone', ''),
+            },
+            receipt_email=customer_info.get('email'),
+            automatic_payment_methods={
+                'enabled': True,
+            },
+        )
+        
+        return {
+            'clientSecret': intent.client_secret,
+            'paymentIntentId': intent.id
+        }
+        
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error creating payment intent: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create payment intent")
+
 # Include the router in the main app
 app.include_router(api_router)
 
