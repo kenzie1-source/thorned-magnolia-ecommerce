@@ -238,9 +238,16 @@ async def create_custom_order_endpoint(order: CustomOrderCreate):
     order_dict["status"] = "pending"
     order_dict["createdAt"] = datetime.utcnow()
     order_dict["updatedAt"] = datetime.utcnow()
+    order_dict["type"] = "custom_order"
     
     order_id = await create_custom_order(order_dict)
     order_dict["id"] = str(order_id)
+    
+    # Send email notifications
+    try:
+        await send_order_emails(order_dict)
+    except Exception as e:
+        logger.error(f"Failed to send emails: {e}")
     
     return CustomOrder(**order_dict)
 
