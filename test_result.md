@@ -146,15 +146,18 @@ backend:
 
   - task: "API Endpoints - Custom Orders"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented custom orders with file upload, pricing calculations, and status management"
+      - working: true
+        agent: "testing"
+        comment: "✅ Custom orders fully functional: POST /custom-orders creates orders with correct pricing, GET /custom-orders retrieves all orders, GET /custom-orders/{id} gets specific order, PUT /custom-orders/{id}/status updates status. Tested 3 pricing scenarios successfully."
 
   - task: "File Upload System"
     implemented: true
