@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, ShoppingBag, Search, Heart } from 'lucide-react';
+import { Menu, Search, Heart } from 'lucide-react';
 import { categoriesAPI } from '../services/api';
-import { useCart } from '../contexts/CartContext';
+import ShopifyCheckout from './ShopifyCheckout';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  const { getCartItemsCount } = useCart();
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -75,12 +74,9 @@ const Navbar = () => {
             <Button variant="ghost" size="sm" className="hidden sm:flex">
               <Heart className="h-5 w-5 text-charcoal" />
             </Button>
-            <Button variant="ghost" size="sm" className="relative">
-              <ShoppingBag className="h-5 w-5 text-charcoal" />
-              <span className="absolute -top-1 -right-1 bg-warm-sage text-cream-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {getCartItemsCount()}
-              </span>
-            </Button>
+            
+            {/* Shopify Cart */}
+            <ShopifyCheckout className="cart-toggle" />
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
