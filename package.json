@@ -1,0 +1,12 @@
+{
+  "name": "thorned-magnolia-collective",
+  "version": "1.0.0",
+  "description": "E-commerce website for Thorned Magnolia Collective",
+  "scripts": {
+    "build": "cd frontend && yarn build",
+    "start": "cd frontend && yarn start",
+    "backend": "cd backend && python server.py"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
