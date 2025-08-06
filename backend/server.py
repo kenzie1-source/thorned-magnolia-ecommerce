@@ -290,9 +290,16 @@ async def create_order_endpoint(order: OrderCreate):
     order_dict["status"] = "pending"
     order_dict["createdAt"] = datetime.utcnow()
     order_dict["updatedAt"] = datetime.utcnow()
+    order_dict["type"] = "regular_order"
     
     order_id = await create_order(order_dict)
     order_dict["id"] = str(order_id)
+    
+    # Send email notifications
+    try:
+        await send_order_emails(order_dict)
+    except Exception as e:
+        logger.error(f"Failed to send emails: {e}")
     
     return Order(**order_dict)
 
