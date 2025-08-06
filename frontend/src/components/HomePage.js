@@ -99,7 +99,58 @@ const HomePage = () => {
       </section>
 
       {/* Shopify Products - Replaces Featured Products */}
-      <ShopifyProductGrid title="Shop Our Collection" />
+      <section className="featured-section py-16 px-4 bg-soft-gray">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="section-title text-4xl font-light text-center text-charcoal mb-12">
+            Shop Our Collection
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {featuredProducts.map((product) => (
+              <Card key={product.id} className="product-card hover:shadow-xl transition-all duration-300">
+                <div className="relative">
+                  <img 
+                    src={product.image} 
+                    alt={product.name}
+                    className="w-full h-64 object-cover rounded-t-lg"
+                  />
+                  <Button 
+                    size="sm" 
+                    className="absolute top-4 right-4 btn-icon"
+                    variant="outline"
+                  >
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                </div>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-medium text-charcoal mb-2">
+                    {product.name}
+                  </h3>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col">
+                      <span className="text-xl font-semibold text-rich-chocolate">
+                        ${product.price}
+                      </span>
+                      <span className="text-sm text-warm-gray">
+                        {product.type === 'sweatshirt' ? 'Sweatshirt' : 'T-Shirt'} • Front only
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                      <span className="text-sm text-warm-gray ml-1">4.8</span>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full btn-primary"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Custom Orders CTA */}
       <section className="custom-cta-section py-16 px-4 bg-warm-sage text-cream-white">
