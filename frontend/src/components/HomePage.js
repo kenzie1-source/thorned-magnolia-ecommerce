@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { ShoppingBag, Heart, Star, ArrowRight } from 'lucide-react';
-import { categoriesAPI } from '../services/api';
-import ShopifyProductGrid from './ShopifyProductGrid';
+import { categoriesAPI, productsAPI } from '../services/api';
+import { useCart } from '../contexts/CartContext';
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
