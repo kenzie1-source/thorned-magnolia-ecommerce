@@ -224,8 +224,8 @@ const ProductCatalog = () => {
               Try adjusting your filters or check back later for new items.
             </p>
             <Button onClick={() => {
-              setSelectedSize('');
-              setSelectedColor('');
+              setSelectedSize('all');
+              setSelectedColor('all');
             }}>
               Clear Filters
             </Button>
