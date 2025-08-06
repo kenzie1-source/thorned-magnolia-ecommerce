@@ -100,7 +100,7 @@ const ProductCatalog = () => {
                     <SelectValue placeholder="All Sizes" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Sizes</SelectItem>
+                    <SelectItem value="all">All Sizes</SelectItem>
                     {allSizes.map(size => (
                       <SelectItem key={size} value={size}>{size}</SelectItem>
                     ))}
