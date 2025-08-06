@@ -294,10 +294,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "API Endpoints - Cart Management"
-    - "API Endpoints - Custom Orders"
-    - "File Upload System"
-    - "Pricing Logic Implementation"
     - "Product Catalog with Filtering"
     - "Custom Orders Form with File Upload"
     - "Shopping Cart Context and Management"
