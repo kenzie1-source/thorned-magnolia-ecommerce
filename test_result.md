@@ -231,15 +231,18 @@ frontend:
 
   - task: "Custom Orders Form with File Upload"
     implemented: true
-    working: "NA"
+    working: true
     file: "CustomOrders.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented complete form with file upload, pricing calculations, and API integration"
+      - working: true
+        agent: "testing"
+        comment: "✅ Custom orders form fully functional: All form fields work (contact info, design text, product options). Dropdown selections work for shirt style, color, size, print location, and quantity. Form validation and submit button enabled when required fields filled. File upload area present and functional. Real backend API integration confirmed. Minor: Pricing calculation shows $0 until all required fields selected, but this is expected behavior."
 
   - task: "Shopping Cart Context and Management"
     implemented: true
