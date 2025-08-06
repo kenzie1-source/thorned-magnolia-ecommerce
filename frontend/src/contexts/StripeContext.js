@@ -8,9 +8,7 @@ const StripeContext = createContext();
 
 export const StripeProvider = ({ children }) => {
   const options = {
-    // Passing the client secret obtained from the server
-    mode: 'payment',
-    currency: 'usd',
+    // Basic configuration - payment intent will be created when needed
     appearance: {
       theme: 'stripe',
       variables: {
@@ -39,10 +37,8 @@ export const StripeProvider = ({ children }) => {
   };
 
   return (
-    <StripeContext.Provider value={{ stripePromise }}>
-      <Elements stripe={stripePromise} options={options}>
-        {children}
-      </Elements>
+    <StripeContext.Provider value={{ stripePromise, options }}>
+      {children}
     </StripeContext.Provider>
   );
 };
