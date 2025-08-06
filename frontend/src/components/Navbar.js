@@ -8,7 +8,22 @@ import { useCart } from '../contexts/CartContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const { getCartItemsCount } = useCart();
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const categoriesData = await categoriesAPI.getAll();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/category/${categoryId}`);
