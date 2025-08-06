@@ -78,7 +78,7 @@ const Navbar = () => {
             <Button variant="ghost" size="sm" className="relative">
               <ShoppingBag className="h-5 w-5 text-charcoal" />
               <span className="absolute -top-1 -right-1 bg-warm-sage text-cream-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {getCartItemsCount()}
               </span>
             </Button>
 
