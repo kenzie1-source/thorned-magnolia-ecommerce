@@ -15,19 +15,21 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <CartProvider>
-          <Navbar />
-          <main className="min-h-screen">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/category/:categoryId" element={<ProductCatalog />} />
-              <Route path="/custom-orders" element={<CustomOrders />} />
-            </Routes>
-          </main>
-          <Footer />
-          <MusicPlayer />
-          <Toaster />
-        </CartProvider>
+        <StripeProvider>
+          <CartProvider>
+            <Navbar />
+            <main className="min-h-screen">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/category/:categoryId" element={<ProductCatalog />} />
+                <Route path="/custom-orders" element={<CustomOrders />} />
+              </Routes>
+            </main>
+            <Footer />
+            <MusicPlayer />
+            <Toaster />
+          </CartProvider>
+        </StripeProvider>
       </BrowserRouter>
     </div>
   );
