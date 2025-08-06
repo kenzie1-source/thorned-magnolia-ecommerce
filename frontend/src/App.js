@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/toaster";
 import { CartProvider } from "./contexts/CartContext";
+import { StripeProvider } from "./contexts/StripeContext";
 import HomePage from "./components/HomePage";
 import ProductCatalog from "./components/ProductCatalog";
 import CustomOrders from "./components/CustomOrders";
