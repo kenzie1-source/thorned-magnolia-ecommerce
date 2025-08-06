@@ -188,15 +188,18 @@ backend:
 
   - task: "Pricing Logic Implementation"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented pricing: T-shirts $20/$25, Sweatshirts $25/$30, size premiums +$2 above XL"
+      - working: true
+        agent: "testing"
+        comment: "✅ Pricing logic verified with 3 test cases: 1) Regular T-shirt front only M = $20 ✓, 2) Sweatshirt both sides 2XL qty 2 = $64 ✓ (($30+$2)*2), 3) V-neck both sides 3XL = $29 ✓ ($25+$4). All pricing calculations accurate including size premiums and front/back options."
 
 frontend:
   - task: "Homepage with Categories and Featured Products"
