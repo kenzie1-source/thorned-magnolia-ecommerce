@@ -20,7 +20,7 @@ export const products = [
     name: 'World\'s Best Teacher',
     category: 'teachers',
     price: 20,
-    image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=400&fit=crop',
+    image: 'https://via.placeholder.com/400x400/C4B5A0/2C2C2C?text=Teacher+Shirt',
     colors: ['White', 'Black', 'Navy', 'Heather Gray'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
   },
@@ -29,7 +29,7 @@ export const products = [
     name: 'Mama Bear',
     category: 'mamas',
     price: 20,
-    image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+    image: 'https://via.placeholder.com/400x400/D4C4B0/2C2C2C?text=Mama+Bear',
     colors: ['Rose Gold', 'White', 'Mauve', 'Black'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
   },
@@ -38,7 +38,7 @@ export const products = [
     name: 'Fall Vibes',
     category: 'seasons',
     price: 20,
-    image: 'https://images.unsplash.com/photo-1542272454315-7ad9b6aa8b83?w=400&h=400&fit=crop',
+    image: 'https://via.placeholder.com/400x400/8B7D6B/FAF9F7?text=Fall+Vibes',
     colors: ['Burnt Orange', 'Burgundy', 'Mustard', 'Brown'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
   },
@@ -47,7 +47,7 @@ export const products = [
     name: 'Be Kind',
     category: 'quotes',
     price: 20,
-    image: 'https://images.unsplash.com/photo-1618354691792-d1d42acfd860?w=400&h=400&fit=crop',
+    image: 'https://via.placeholder.com/400x400/C4B5A0/FAF9F7?text=Be+Kind',
     colors: ['Sage', 'Pink', 'White', 'Light Blue'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
   },
@@ -56,7 +56,7 @@ export const products = [
     name: 'Retro Sunset',
     category: 'graphic',
     price: 20,
-    image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+    image: 'https://via.placeholder.com/400x400/6B4E37/FAF9F7?text=Retro+Sunset',
     colors: ['Black', 'Navy', 'White', 'Coral'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
   },
@@ -65,7 +65,7 @@ export const products = [
     name: 'Dad Joke Loading',
     category: 'dads',
     price: 20,
-    image: 'https://images.unsplash.com/photo-1618354691792-d1d42acfd860?w=400&h=400&fit=crop',
+    image: 'https://via.placeholder.com/400x400/2C2C2C/FAF9F7?text=Dad+Jokes',
     colors: ['Black', 'Gray', 'Navy', 'White'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
   }
