@@ -308,12 +308,7 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Product Catalog with Filtering"
-    - "Custom Orders Form with File Upload"
-    - "Shopping Cart Context and Management"
-    - "API Service Layer"
-    - "Navigation with Cart Count"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
