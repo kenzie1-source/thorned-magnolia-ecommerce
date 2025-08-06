@@ -8,16 +8,22 @@ import ShopifyProductGrid from './ShopifyProductGrid';
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const categoriesData = await categoriesAPI.getAll();
+        const [categoriesData, productsData] = await Promise.all([
+          categoriesAPI.getAll(),
+          productsAPI.getAll()
+        ]);
         setCategories(categoriesData);
+        setFeaturedProducts(productsData.slice(0, 4));
       } catch (error) {
-        console.error('Error loading categories:', error);
+        console.error('Error loading data:', error);
       } finally {
         setLoading(false);
       }
@@ -25,6 +31,17 @@ const HomePage = () => {
 
     loadData();
   }, []);
+
+  const handleAddToCart = async (product) => {
+    const defaultOptions = {
+      selectedColor: product.colors[0],
+      selectedSize: 'M',
+      printLocation: 'front',
+      quantity: 1
+    };
+    
+    await addToCart(product, defaultOptions);
+  };
 
   if (loading) {
     return (
