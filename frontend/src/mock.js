@@ -82,7 +82,7 @@ export const fonts = [
 export const tshirtStyles = [
   { id: 'regular', name: 'Regular T-Shirt', basePrice: 20 },
   { id: 'vneck', name: 'V-Neck T-Shirt', basePrice: 20 },
-  { id: 'sweatshirt', name: 'Sweatshirt', basePrice: 30 }
+  { id: 'sweatshirt', name: 'Sweatshirt', basePrice: 25 }
 ];
 
 export const colors = [
