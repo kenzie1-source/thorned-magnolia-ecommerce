@@ -114,7 +114,7 @@ const ProductCatalog = () => {
                     <SelectValue placeholder="All Colors" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Colors</SelectItem>
+                    <SelectItem value="all">All Colors</SelectItem>
                     {allColors.map(color => (
                       <SelectItem key={color} value={color}>{color}</SelectItem>
                     ))}
