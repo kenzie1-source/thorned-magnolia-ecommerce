@@ -22,6 +22,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <MusicPlayer />
         <Toaster />
       </BrowserRouter>
     </div>
