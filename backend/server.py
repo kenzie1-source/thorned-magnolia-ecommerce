@@ -16,6 +16,7 @@ import stripe
 # Import models and database functions
 from models import *
 from database import *
+from email_service import send_order_emails
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
