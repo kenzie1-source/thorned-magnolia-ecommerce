@@ -7,9 +7,10 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
-import { Upload, ArrowLeft, Image as ImageIcon, Type, Palette, Shirt } from 'lucide-react';
+import { Upload, ArrowLeft, Image as ImageIcon, Type, Palette, Shirt, CreditCard } from 'lucide-react';
 import { customOrdersAPI, uploadAPI, utilityAPI, calculatePrice } from '../services/api';
 import { useToast } from '../hooks/use-toast';
+import StripeCheckout from './StripeCheckout';
 
 const CustomOrders = () => {
   const [formData, setFormData] = useState({
@@ -34,6 +35,7 @@ const CustomOrders = () => {
   const [colors, setColors] = useState([]);
   const [shirtStyles, setShirtStyles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCheckout, setShowCheckout] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -124,8 +126,30 @@ const CustomOrders = () => {
     return calculatePrice(formData.shirtStyle, formData.size, formData.printLocation, formData.quantity);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handlePaymentClick = () => {
+    // Validate required fields
+    if (!formData.customerName || !formData.email || !formData.shirtStyle || !formData.shirtColor || !formData.size) {
+      toast({
+        title: "Required fields missing",
+        description: "Please fill in all required fields before proceeding to payment.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.designImage && !formData.designText) {
+      toast({
+        title: "Design required",
+        description: "Please upload an image or enter text for your design.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setShowCheckout(true);
+  };
+
+  const handlePaymentSuccess = async (paymentIntent) => {
     setIsSubmitting(true);
 
     try {
@@ -141,14 +165,15 @@ const CustomOrders = () => {
         size: formData.size,
         printLocation: formData.printLocation,
         quantity: formData.quantity,
-        specialInstructions: formData.specialInstructions
+        specialInstructions: formData.specialInstructions,
+        paymentIntentId: paymentIntent.id
       };
 
       const result = await customOrdersAPI.create(orderData);
       
       toast({
-        title: "Order submitted successfully!",
-        description: `Your custom order #${result.orderId} has been received. We'll contact you within 24 hours.`,
+        title: "Custom order submitted successfully!",
+        description: `Your custom order #${result.orderId} has been received and paid for. We'll start production soon!`,
       });
       
       // Reset form
@@ -167,11 +192,12 @@ const CustomOrders = () => {
         specialInstructions: ''
       });
       setImagePreview('');
+      setShowCheckout(false);
     } catch (error) {
       console.error('Error submitting order:', error);
       toast({
         title: "Error submitting order",
-        description: "Please try again or contact us directly.",
+        description: "Payment successful but failed to save order. We'll contact you via email.",
         variant: "destructive"
       });
     } finally {
@@ -185,6 +211,42 @@ const CustomOrders = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-sage mx-auto mb-4"></div>
           <p className="text-warm-gray">Loading custom order form...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (showCheckout) {
+    return (
+      <div className="custom-orders-page bg-cream-white min-h-screen py-8 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <Button 
+              onClick={() => setShowCheckout(false)}
+              className="inline-flex items-center text-warm-sage hover:text-rich-chocolate mb-4"
+              variant="ghost"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Form
+            </Button>
+            <h1 className="text-4xl font-light text-charcoal mb-2">Complete Payment</h1>
+            <p className="text-lg text-warm-gray">
+              Secure payment for your custom order
+            </p>
+          </div>
+          
+          <div className="flex justify-center">
+            <StripeCheckout
+              amount={calculateTotalPrice()}
+              orderData={{
+                ...formData,
+                type: 'custom_order'
+              }}
+              onSuccess={handlePaymentSuccess}
+              onCancel={() => setShowCheckout(false)}
+              title="Custom Order Payment"
+            />
+          </div>
         </div>
       </div>
     );
@@ -205,7 +267,7 @@ const CustomOrders = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Form */}
             <div className="lg:col-span-2 space-y-6">
@@ -485,21 +547,22 @@ const CustomOrders = () => {
                   )}
 
                   <Button 
-                    type="submit" 
+                    onClick={handlePaymentClick}
                     className="w-full btn-primary mt-6" 
-                    disabled={isSubmitting || !formData.customerName || !formData.email}
+                    disabled={isSubmitting || !formData.customerName || !formData.email || calculateTotalPrice() === 0}
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit Custom Order'}
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {isSubmitting ? 'Processing...' : `Pay $${calculateTotalPrice()} Now`}
                   </Button>
 
                   <p className="text-xs text-warm-gray text-center mt-4">
-                    We'll contact you within 24 hours to confirm details and arrange payment.
+                    Secure payment processing powered by Stripe. Production starts after payment confirmation.
                   </p>
                 </CardContent>
               </Card>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu, Search, Heart } from 'lucide-react';
 import { categoriesAPI } from '../services/api';
-import ShopifyCheckout from './ShopifyCheckout';
+import ShoppingCart from './ShoppingCart';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,8 +75,8 @@ const Navbar = () => {
               <Heart className="h-5 w-5 text-charcoal" />
             </Button>
             
-            {/* Shopify Cart */}
-            <ShopifyCheckout className="cart-toggle" />
+            {/* Shopping Cart with Stripe */}
+            <ShoppingCart />
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
