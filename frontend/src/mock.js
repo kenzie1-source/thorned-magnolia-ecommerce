@@ -68,6 +68,26 @@ export const products = [
     image: 'https://via.placeholder.com/400x400/2C2C2C/FAF9F7?text=Dad+Jokes',
     colors: ['Black', 'Gray', 'Navy', 'White'],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
+  },
+  {
+    id: 7,
+    name: 'Cozy Fall Sweatshirt',
+    category: 'seasons',
+    price: 25,
+    image: 'https://via.placeholder.com/400x400/C4B5A0/2C2C2C?text=Cozy+Sweatshirt',
+    colors: ['Heather Gray', 'Burgundy', 'Navy', 'Black'],
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    type: 'sweatshirt'
+  },
+  {
+    id: 8,
+    name: 'Mama Life Sweatshirt',
+    category: 'mamas',
+    price: 25,
+    image: 'https://via.placeholder.com/400x400/D4C4B0/2C2C2C?text=Mama+Life',
+    colors: ['Sage', 'Pink', 'Gray', 'White'],
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    type: 'sweatshirt'
   }
 ];
 
