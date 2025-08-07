@@ -246,7 +246,7 @@ const ProductCatalog = () => {
                   className="w-full btn-primary"
                   onClick={() => handleAddToCart(product)}
                 >
-                  Add to Cart
+                  Select Options
                 </Button>
               </CardContent>
             </Card>
