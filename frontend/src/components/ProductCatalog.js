@@ -206,25 +206,24 @@ const ProductCatalog = () => {
                 </h3>
                 
                 <div className="flex flex-wrap gap-1 mb-3">
-                  {product.colors.slice(0, 4).map(color => (
+                  {availableColors.slice(0, 4).map(color => (
                     <div 
                       key={color}
                       className="w-4 h-4 rounded-full border border-warm-gray"
                       style={{ 
                         backgroundColor: color.toLowerCase() === 'white' ? '#ffffff' : 
                                         color.toLowerCase() === 'black' ? '#000000' :
-                                        color.toLowerCase() === 'navy' ? '#001f3f' :
-                                        color.toLowerCase() === 'gray' ? '#808080' :
+                                        color.toLowerCase() === 'grey' ? '#808080' :
+                                        color.toLowerCase() === 'beige' ? '#F5F5DC' :
+                                        color.toLowerCase() === 'blue' ? '#0066CC' :
                                         color.toLowerCase() === 'red' ? '#dc3545' :
-                                        color.toLowerCase() === 'pink' ? '#e83e8c' :
-                                        color.toLowerCase() === 'sage' ? '#C4B5A0' :
                                         '#C4B5A0'
                       }}
                       title={color}
                     />
                   ))}
-                  {product.colors.length > 4 && (
-                    <span className="text-xs text-warm-gray">+{product.colors.length - 4}</span>
+                  {availableColors.length > 4 && (
+                    <span className="text-xs text-warm-gray">+{availableColors.length - 4}</span>
                   )}
                 </div>
 
