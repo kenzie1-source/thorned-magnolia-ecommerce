@@ -7,6 +7,7 @@ import { Badge } from './ui/badge';
 import { Heart, Star, Filter, ArrowLeft } from 'lucide-react';
 import { productsAPI, categoriesAPI } from '../services/api';
 import { useCart } from '../contexts/CartContext';
+import ProductDetailModal from './ProductDetailModal';
 
 const ProductCatalog = () => {
   const { categoryId } = useParams();
