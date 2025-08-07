@@ -155,7 +155,7 @@ const ProductCatalog = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Colors</SelectItem>
-                    {allColors.map(color => (
+                    {availableColors.map(color => (
                       <SelectItem key={color} value={color}>{color}</SelectItem>
                     ))}
                   </SelectContent>
