@@ -338,7 +338,7 @@ async def get_sizes():
         {"id": "XL", "name": "Extra Large", "extraCost": 0},
         {"id": "2XL", "name": "2X Large", "extraCost": 2},
         {"id": "3XL", "name": "3X Large", "extraCost": 4},
-        {"id": "4XL", "name": "4X Large", "extraCost": 6},
+        {"id": "4XL", "name": "4X Large", "extraCost": 2},
         {"id": "5XL", "name": "5X Large", "extraCost": 8}
     ]
     return sizes
