@@ -75,18 +75,18 @@ const ProductCatalog = () => {
   }, [products, sortBy, selectedSize, selectedColor]);
 
   const handleAddToCart = async (product) => {
-    const defaultOptions = {
-      selectedColor: product.colors[0],
-      selectedSize: 'M',
-      printLocation: 'front',
-      quantity: 1
-    };
-    
-    await addToCart(product, defaultOptions);
+    setSelectedProduct(product);
+    setIsModalOpen(true);
   };
 
-  const allColors = [...new Set(products.flatMap(product => product.colors))];
-  const allSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  // Available colors for filtering (user specified colors)
+  const availableColors = ['Black', 'Grey', 'White', 'Beige', 'Blue', 'Red'];
+  const allSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
 
   if (loading) {
     return (
