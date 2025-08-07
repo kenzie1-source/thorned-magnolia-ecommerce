@@ -9,26 +9,22 @@
       }
     },
     {
-      "src": "backend/server.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/backend/server.py"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/backend/server.py"
+      "dest": "/api/index.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/build/index.html"
+      "dest": "/frontend/build/$1"
     }
   ],
   "functions": {
-    "backend/server.py": {
+    "api/index.py": {
       "maxDuration": 30
     }
   }
