@@ -534,14 +534,26 @@ class BackendTester:
                 self.log_test(test_name, False, f"Exception: {str(e)}")
                 
     def run_all_tests(self):
-        """Run all backend tests"""
+        """Run all backend tests with focus on new product customization features"""
         print("🚀 Starting Thorned Magnolia Collective Backend API Tests")
+        print("🎯 Focus: New Product Customization Features")
         print("=" * 60)
         
         # Test basic connectivity
         self.test_root_endpoint()
         
-        # Test core functionality
+        # Priority 1: New Product Customization Features
+        print("\n🔥 PRIORITY 1: NEW PRODUCT CUSTOMIZATION FEATURES")
+        self.test_teachers_category_products()
+        self.test_new_customization_endpoints()
+        self.test_cart_with_customization()
+        
+        # Priority 2: Updated Pricing Logic
+        print("\n💰 PRIORITY 2: UPDATED PRICING LOGIC")
+        self.test_pricing_logic_detailed()
+        
+        # Priority 3: Core API Functionality
+        print("\n⚙️ PRIORITY 3: CORE API FUNCTIONALITY")
         self.test_products_endpoints()
         self.test_categories_endpoint()
         self.test_cart_management()
