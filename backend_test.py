@@ -90,6 +90,215 @@ class BackendTester:
         except Exception as e:
             self.log_test("Products Endpoints", False, f"Exception: {str(e)}")
             
+    def test_teachers_category_products(self):
+        """Test GET /api/products/category/teachers for new customization features"""
+        print("\n=== TESTING TEACHERS CATEGORY PRODUCTS ===")
+        
+        try:
+            response = self.session.get(f"{BASE_URL}/products/category/teachers")
+            success = response.status_code == 200
+            products = response.json() if success else []
+            
+            self.log_test("GET /products/category/teachers", success, 
+                         f"Status: {response.status_code}, Products count: {len(products)}")
+            
+            if success and products:
+                # Check first product for correct colors and sizes
+                product = products[0]
+                expected_colors = ["Black", "Grey", "White", "Beige", "Blue", "Red"]
+                expected_sizes = ["S", "M", "L", "XL", "2XL", "3XL", "4XL"]
+                
+                product_colors = product.get('colors', [])
+                product_sizes = product.get('sizes', [])
+                
+                # Test colors
+                colors_match = all(color in expected_colors for color in product_colors) and len(product_colors) == 6
+                self.log_test("Teachers Products - Colors Check", colors_match, 
+                             f"Product colors: {product_colors}, Expected: {expected_colors}")
+                
+                # Test sizes including 4XL
+                sizes_match = all(size in expected_sizes for size in product_sizes) and "4XL" in product_sizes
+                self.log_test("Teachers Products - Sizes Check (includes 4XL)", sizes_match, 
+                             f"Product sizes: {product_sizes}, Expected: {expected_sizes}")
+                             
+        except Exception as e:
+            self.log_test("Teachers Category Products", False, f"Exception: {str(e)}")
+            
+    def test_new_customization_endpoints(self):
+        """Test new customization endpoints - colors, sizes with 4XL pricing"""
+        print("\n=== TESTING NEW CUSTOMIZATION ENDPOINTS ===")
+        
+        # Test GET /colors - should return exactly 6 user-specified colors
+        try:
+            response = self.session.get(f"{BASE_URL}/colors")
+            success = response.status_code == 200
+            colors = response.json() if success else []
+            expected_colors = ["Black", "Grey", "White", "Beige", "Blue", "Red"]
+            
+            colors_correct = success and colors == expected_colors
+            self.log_test("GET /colors - 6 User Colors", colors_correct, 
+                         f"Status: {response.status_code}, Colors: {colors}")
+                         
+        except Exception as e:
+            self.log_test("GET /colors", False, f"Exception: {str(e)}")
+            
+        # Test GET /sizes - should include 4XL with correct pricing
+        try:
+            response = self.session.get(f"{BASE_URL}/sizes")
+            success = response.status_code == 200
+            sizes = response.json() if success else []
+            
+            # Find 4XL size and check pricing
+            size_4xl = next((size for size in sizes if size.get('id') == '4XL'), None)
+            has_4xl = size_4xl is not None
+            correct_4xl_price = size_4xl and size_4xl.get('extraCost') == 2
+            
+            self.log_test("GET /sizes - Includes 4XL", has_4xl, 
+                         f"Status: {response.status_code}, 4XL found: {has_4xl}")
+            self.log_test("GET /sizes - 4XL Pricing (+$2)", correct_4xl_price, 
+                         f"4XL extra cost: ${size_4xl.get('extraCost') if size_4xl else 'N/A'}")
+                         
+        except Exception as e:
+            self.log_test("GET /sizes", False, f"Exception: {str(e)}")
+            
+    def test_cart_with_customization(self):
+        """Test cart operations with new customization options"""
+        print("\n=== TESTING CART WITH NEW CUSTOMIZATION OPTIONS ===")
+        
+        try:
+            # Get a product first
+            products_response = self.session.get(f"{BASE_URL}/products")
+            if products_response.status_code != 200:
+                self.log_test("Cart Customization - Get Products", False, "Cannot get products")
+                return
+                
+            products = products_response.json()
+            if not products:
+                self.log_test("Cart Customization - No Products", False, "No products available")
+                return
+                
+            test_product = products[0]
+            
+            # Test adding customized item to cart with new options
+            customized_cart_item = {
+                "sessionId": self.test_session_id + "_custom",
+                "productId": test_product["id"],
+                "quantity": 2,
+                "selectedColor": "Black",  # From new color set
+                "selectedSize": "4XL",     # New size with upcharge
+                "printLocation": "both",   # Front and back
+                "customizations": {
+                    "designText": "Custom Teacher Design",
+                    "font": "serif"
+                }
+            }
+            
+            response = self.session.post(f"{BASE_URL}/cart", json=customized_cart_item)
+            success = response.status_code == 200
+            cart_data = response.json() if success else {}
+            
+            self.log_test("POST /cart - Customized Item (4XL, Black, Both Sides)", success, 
+                         f"Status: {response.status_code}")
+            
+            if success:
+                # Verify cart contains customization details
+                response = self.session.get(f"{BASE_URL}/cart/{self.test_session_id}_custom")
+                success = response.status_code == 200
+                cart = response.json() if success else {}
+                
+                if cart and cart.get("items"):
+                    item = cart["items"][0]
+                    color_correct = item.get("selectedColor") == "Black"
+                    size_correct = item.get("selectedSize") == "4XL"
+                    print_correct = item.get("printLocation") == "both"
+                    
+                    self.log_test("Cart Item - Color Customization", color_correct, 
+                                 f"Selected color: {item.get('selectedColor')}")
+                    self.log_test("Cart Item - Size Customization (4XL)", size_correct, 
+                                 f"Selected size: {item.get('selectedSize')}")
+                    self.log_test("Cart Item - Print Location", print_correct, 
+                                 f"Print location: {item.get('printLocation')}")
+                                 
+                # Clean up test cart
+                self.session.delete(f"{BASE_URL}/cart/{self.test_session_id}_custom")
+                
+        except Exception as e:
+            self.log_test("Cart with Customization", False, f"Exception: {str(e)}")
+            
+    def test_pricing_logic_detailed(self):
+        """Test detailed pricing logic for different sizes and print locations"""
+        print("\n=== TESTING DETAILED PRICING LOGIC ===")
+        
+        test_cases = [
+            {
+                "name": "Regular T-shirt, Front Only, Size M",
+                "order": {
+                    "customerName": "Test Customer 1",
+                    "email": "test1@example.com",
+                    "shirtStyle": "regular",
+                    "shirtColor": "White",
+                    "size": "M",
+                    "printLocation": "front",
+                    "quantity": 1
+                },
+                "expected_price": 20  # Base price for regular t-shirt front only
+            },
+            {
+                "name": "Regular T-shirt, Both Sides, Size 4XL",
+                "order": {
+                    "customerName": "Test Customer 2", 
+                    "email": "test2@example.com",
+                    "shirtStyle": "regular",
+                    "shirtColor": "Black",
+                    "size": "4XL",
+                    "printLocation": "both",
+                    "quantity": 1
+                },
+                "expected_price": 27  # $25 (both sides) + $2 (4XL upcharge)
+            },
+            {
+                "name": "Sweatshirt, Front Only, Size 4XL",
+                "order": {
+                    "customerName": "Test Customer 3",
+                    "email": "test3@example.com", 
+                    "shirtStyle": "sweatshirt",
+                    "shirtColor": "Grey",
+                    "size": "4XL",
+                    "printLocation": "front",
+                    "quantity": 1
+                },
+                "expected_price": 27  # $25 (sweatshirt base) + $2 (4XL upcharge)
+            },
+            {
+                "name": "Sweatshirt, Both Sides, Size 4XL, Quantity 2",
+                "order": {
+                    "customerName": "Test Customer 4",
+                    "email": "test4@example.com",
+                    "shirtStyle": "sweatshirt", 
+                    "shirtColor": "Blue",
+                    "size": "4XL",
+                    "printLocation": "both",
+                    "quantity": 2
+                },
+                "expected_price": 64  # ($30 both sides + $2 4XL) * 2 quantity
+            }
+        ]
+        
+        for test_case in test_cases:
+            try:
+                response = self.session.post(f"{BASE_URL}/custom-orders", json=test_case["order"])
+                success = response.status_code == 200
+                order_data = response.json() if success else {}
+                actual_price = order_data.get('totalPrice', 0)
+                expected_price = test_case["expected_price"]
+                
+                price_correct = actual_price == expected_price
+                self.log_test(f"Pricing - {test_case['name']}", price_correct, 
+                             f"Status: {response.status_code}, Price: ${actual_price} (expected: ${expected_price})")
+                             
+            except Exception as e:
+                self.log_test(f"Pricing - {test_case['name']}", False, f"Exception: {str(e)}")
+            
     def test_categories_endpoint(self):
         """Test categories endpoint"""
         print("\n=== TESTING CATEGORIES ENDPOINT ===")
