@@ -25,7 +25,7 @@ load_dotenv(ROOT_DIR / '.env')
 stripe.api_key = "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"
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ.get('DB_NAME', 'thornedmagnolia')]
 
