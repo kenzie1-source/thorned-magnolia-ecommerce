@@ -1,8 +1,8 @@
 import os
 import smtplib
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
-from email.mime.base import MimeBase
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
 from email import encoders
 import logging
 from jinja2 import Template
@@ -160,13 +160,13 @@ async def send_email(to_email, subject, html_content, from_name="Thorned Magnoli
             logger.warning("Gmail app password not set. Emails won't be sent.")
             return False
             
-        msg = MimeMultipart('alternative')
+        msg = MIMEMultipart('alternative')
         msg['Subject'] = subject
         msg['From'] = f"{from_name} <{FROM_EMAIL}>"
         msg['To'] = to_email
 
         # Add HTML content
-        html_part = MimeText(html_content, 'html')
+        html_part = MIMEText(html_content, 'html')
         msg.attach(html_part)
 
         # Send email
