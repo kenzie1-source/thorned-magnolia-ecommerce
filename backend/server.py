@@ -227,7 +227,7 @@ async def create_custom_order_endpoint(order: CustomOrderCreate):
             base_price = 25  # $25 for front & back t-shirt
     
     # Add size premium
-    size_premiums = {"2XL": 2, "3XL": 4, "4XL": 6, "5XL": 8}
+    size_premiums = {"2XL": 2, "3XL": 4, "4XL": 2, "5XL": 8}
     size_premium = size_premiums.get(order.size, 0)
     
     total_price = (base_price + size_premium) * order.quantity
