@@ -347,9 +347,7 @@ async def get_sizes():
 async def get_colors():
     """Get available colors"""
     colors = [
-        "White", "Black", "Navy", "Gray", "Heather Gray", "Red", "Royal Blue",
-        "Forest Green", "Purple", "Maroon", "Pink", "Light Blue", "Yellow",
-        "Orange", "Brown", "Sage", "Mauve", "Rose Gold", "Burnt Orange"
+        "Black", "Grey", "White", "Beige", "Blue", "Red"
     ]
     return colors
 
